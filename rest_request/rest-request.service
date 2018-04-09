@@ -1,0 +1,17 @@
+[Unit]
+Description=Restful Request Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=pyenv
+Group=app
+PermissionsStartOnly=true
+ExecStartPre=-/bin/mkdir /run/rest_request
+ExecStartPre=-/bin/chown pyenv:app /run/rest_request
+PIDFile=/run/rest_request/pid
+Environment=PATH=/home/pyenv/.pyenv/versions/rest_request/bin:$PATH
+ExecStart=/home/pyenv/.pyenv/versions/rest_request/bin/python /opt/app/rest_request/main.py
+
+[Install]
+WantedBy=multi-user.target
