@@ -7,6 +7,7 @@ import requests
 import logging
 
 from logging.handlers import RotatingFileHandler
+from threading import Timer
 
 LED_R = 11
 LED_G = 13
@@ -17,7 +18,11 @@ BTN_2 = 16  # Videso
 BTN_3 = 18  # Games
 BTN_4 = 22  # Backup
 
+TIME_TO_TURN_LEDS_OFF = 5
+TIMER = None
+
 REST_SERVER = 'http://tri-server:8080/'
+
 
 log_formatter = logging.Formatter('[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S %z')
 
@@ -33,10 +38,19 @@ logger.addHandler(file_handler)
 logger.addHandler(stdout_handler)
 logger.setLevel(logging.INFO)
 
+
+def leds_off():
+    GPIO.output([LED_R, LED_G, LED_B], GPIO.LOW)
+
+
 def handle(pin):
     time.sleep(0.01)
     if GPIO.input(pin) is not 0:
         return
+
+    global TIMER
+    if TIMER is not None:
+        TIMER.cancel()
 
     GPIO.output([LED_R, LED_G], GPIO.LOW)
     GPIO.output(LED_B, GPIO.HIGH)
@@ -72,6 +86,9 @@ def handle(pin):
         GPIO.output(LED_R, GPIO.HIGH)
     else:
         GPIO.output(LED_R, GPIO.HIGH)
+
+    TIMER = Timer(TIME_TO_TURN_LEDS_OFF, leds_off)
+    TIMER.start()
 
 
 if __name__ == '__main__':
