@@ -19,10 +19,10 @@ chown app:app $target_dir
 pwd=$(pwd)
 rm -fr $target_dir/$proj_name
 
-cp -r $pwd $target_dir/$proj_name
+cp -vr $pwd $target_dir/$proj_name
 chown -R pyenv:app $target_dir/$proj_name
 
-cp -f $pwd/rest-request.service /etc/systemd/system/
+cp -vf $pwd/rest-request.service /etc/systemd/system/
 
 test -d $run_dir || mkdir -p $run_dir
 chown -R pyenv:app $run_dir
