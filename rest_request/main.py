@@ -9,14 +9,14 @@ import logging
 from logging.handlers import RotatingFileHandler
 from threading import Timer
 
-LED_R = 11
-LED_G = 13
-LED_B = 15
+LED_R = 16
+LED_G = 20
+LED_B = 21
 
-BTN_1 = 12  # Movies
-BTN_2 = 16  # Videso
-BTN_3 = 18  # Games
-BTN_4 = 22  # Backup
+BTN_1 = 6   # Movies
+BTN_2 = 13  # Videso
+BTN_3 = 19  # Games
+BTN_4 = 26  # Backup
 
 TIME_TO_TURN_LEDS_OFF = 5
 TIMER = None
@@ -93,7 +93,7 @@ def handle(pin):
 
 if __name__ == '__main__':
     logger.info('Starting...')
-    GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     GPIO.setup([BTN_1, BTN_2, BTN_3, BTN_4], GPIO.IN, pull_up_down=GPIO.PUD_OFF)
     GPIO.setup([LED_R, LED_G, LED_B], GPIO.OUT, initial=GPIO.LOW)
