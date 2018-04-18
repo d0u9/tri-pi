@@ -52,7 +52,6 @@ logger.addHandler(file_handler)
 logger.addHandler(stdout_handler)
 logger.setLevel(logging.INFO)
 
-
 def leds_off():
     GPIO.output([LED_R, LED_G, LED_B], GPIO.LOW)
 
