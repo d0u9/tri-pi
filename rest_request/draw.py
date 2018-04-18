@@ -48,36 +48,45 @@ class Draw(object):
         font = self.font
         font_size = self.font_size
 
-        box = (0, offset+1+(font_size+padding)*index, self.width-1, offset+1+(font_size+padding)*(index+1))
+        box = (0, offset+1+(font_size+padding)*index, self.width-1, offset+(font_size+padding)*(index+1))
         zone = self.image.crop(box)
         # invert color
         inverted = ImageMath.eval('255-(a)', a=zone)
         self.image.paste(inverted, box=box)
 
     def select(self, index):
+        if index > len(self.list) - 1:
+            index = len(self.list) - 1
+
         draw = self.draw
         offset = self.offset
         padding = self.padding
         font = self.font
         font_size = self.font_size
 
-        draw.rectangle([0, offset+1+(font_size+padding)*index, self.width-1, offset+1+(font_size+padding)*(index+1)], 1)
-        draw.text((2, offset + (font_size + padding) * i), self.list[i], font=font, fill=0)
+        draw.rectangle([0, offset+1+(font_size+padding)*index, self.width-1, offset+(font_size+padding)*(index+1)], 1)
+        draw.text((2, offset + (font_size + padding) * index), self.list[index], font=font, fill=0)
 
     def deselect(self, index):
+        print(index)
+        if index > len(self.list) - 1:
+            index = len(self.list) - 1
         draw = self.draw
         offset = self.offset
         padding = self.padding
         font = self.font
         font_size = self.font_size
 
-        draw.rectangle([0, offset+1+(font_size+padding)*index, self.width-1, offset+1+(font_size+padding)*(index+1)], 0)
-        draw.text((2, offset + (font_size + padding) * i), self.list[i], font=font, fill=1)
+        draw.rectangle([0, offset+1+(font_size+padding)*index, self.width-1, offset+(font_size+padding)*(index+1)], 0)
+        draw.text((2, offset + (font_size + padding) * index), self.list[index], font=font, fill=1)
 
     def reset(self):
         self.update(self.list)
 
     def update(self, lst):
+        if self.list == lst:
+            return
+
         self.list = lst
         draw = self.draw
         offset = self.offset
@@ -94,6 +103,9 @@ class Draw(object):
     def to_file(self):
         self.image.save(os.path.join(file_dir, str(self.file_num) + '.jpg'), 'JPEG')
         self.file_num += 1
+
+    def to_image(self):
+        return self.image
 
 if __name__ == '__main__':
     d = Draw((128, 64), 8)

@@ -43,9 +43,15 @@ class Display(object):
     def back(self):
         self.menu, self.current_index, self.top_line = self.__stack__.pop()
 
+    def captions(self):
+        return self.menu.captions(self.top_line, self.max_line)
+
     def show(self):
         print('screen = {}'.format(self.menu.captions(self.top_line, self.max_line)))
         print('current = {}'.format(self.menu.get_by_index(self.current_index)))
+
+    def cursor(self):
+        return self.current_index - self.top_line
 
 
 if __name__ == '__main__':
