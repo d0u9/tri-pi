@@ -7,6 +7,7 @@ Type=simple
 User=pyenv
 Group=app
 PermissionsStartOnly=true
+WorkingDirectory=/opt/app/rest_request/
 ExecStartPre=-/bin/mkdir /run/rest_request
 ExecStartPre=-/bin/chown pyenv:app /run/rest_request
 PIDFile=/run/rest_request/pid

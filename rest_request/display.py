@@ -1,103 +1,66 @@
 #!/usr/bin/python
-# -*- coding: <encoding name> -*-
+# -*- coding: utf-8 -*-
 
-from menu import Menu, Item
+import shutil
+import os
+import logging
 
 class Display(object):
-    def __init__(self, menu, max_line):
-        self.__stack__ = []
-        self.menu = menu
-        self.max_line = max_line
-        self.current_index = 0
-        self.top_line = 0
+    def __init__(self):
+        self.size = (0, 0)
+        self.logger = logging.getLogger('rest_request')
 
-    def next(self):
-        if self.current_index == self.menu.size() - 1:
-            return
+    def refresh(self, image):
+        pass
 
-        self.current_index += 1
-        if self.current_index >= self.top_line + self.max_line:
-            self.top_line += 1
+try:
+    import RPi.GPIO as GPIO
+    import Adafruit_GPIO.SPI as SPI
+    import Adafruit_SSD1306
 
-    def prev(self):
-        if self.current_index == 0:
-            return
+    class DisplayOled(Display):
+        def __init__(self):
+            super(DisplayOled, self).__init__()
 
-        self.current_index -= 1
-        if self.current_index < self.top_line:
-            self.top_line -= 1
+            self.rst_pin = 24
+            self.dc_pin = 25
+            self.spi_port = 0
+            self.spi_dev_index = 0
+            self.logger.info('DisplayOled: spi->rst = %d, spi->dc = %d, spi->port = %d, spi->dev = %d',
+                             self.rst_pin, self.dc_pin, self.spi_port, self.spi_dev_index)
+            self.spi = SPI.SpiDev(self.spi_port, self.spi_dev_index, max_speed_hz=8000000)
+            self.oled = Adafruit_SSD1306.SSD1306_128_64(rst=self.rst_pin, dc=self.dc_pin, spi=self.spi)
+            self.size = (self.oled.width, self.oled.height)
+            self.oled.begin()
+            self.oled.clear()
+            self.oled.display()
 
-    def triger(self):
-        self.__stack__.append((self.menu, self.current_index, self.top_line))
-        item = self.menu.get_by_index(self.current_index)
-        if isinstance(item, Menu):
-            self.menu = item
-            self.current_index = 0
-            self.top_line = 0
-        elif isinstance(item, Item):
-            item.run()
-            self.menu, self.current_index, self.top_line = self.__stack__.pop()
-        else:
-            raise TypeError
-
-    def back(self):
-        self.menu, self.current_index, self.top_line = self.__stack__.pop()
-
-    def captions(self):
-        return self.menu.captions(self.top_line, self.max_line)
-
-    def show(self):
-        print('screen = {}'.format(self.menu.captions(self.top_line, self.max_line)))
-        print('current = {}'.format(self.menu.get_by_index(self.current_index)))
-
-    def cursor(self):
-        return self.current_index - self.top_line
+        def refresh(self, image):
+            self.logger.debug('DisplayOled: refresh')
+            self.oled.image(image)
+            self.oled.display()
+except:
+    pass
 
 
-if __name__ == '__main__':
-    def cbs(args):
-        print('Hello {}'.format(args))
+class DisplayFile(Display):
+    def __init__(self, path):
+        super(DisplayFile, self).__init__()
 
-    menu2 = Menu('menu2')
-    menu2.add(('sub2-0', cbs, 'sub2-0'))
-    menu2.add(('sub2-1', cbs, 'sub2-1'))
-    menu2.add(('sub2-2', cbs, 'sub2-2'))
+        self.logger.info('DisplayFile: path = %s', path)
 
-    menu1 = Menu('menu1')
-    menu1.add(('sub1-0', cbs, 'sub1-0'))
-    menu1.add(menu2)
-    menu1.add(('sub1-1', cbs, 'sub1-1'))
-    menu1.add(('sub1-2', cbs, 'sub1-2'))
-    menu1.add(('sub1-3', cbs, 'sub1-3'))
-    menu1.add(('sub1-4', cbs, 'sub1-4'))
-    menu1.add(('sub1-5', cbs, 'sub1-5'))
+        self.size = (128, 64)
+        self.path = path
+        self.file_index = 0
 
-    menu = Menu('root')
-    menu.add(('test0', cbs, 'test0'))
-    menu.add(menu1)
-    menu.add(('test1', cbs, 'test1'))
-    menu.add(('test2', cbs, 'test2'))
-    menu.add(('test3', cbs, 'test3'))
-    menu.add(('test4', cbs, 'test4'))
-    menu.add(('test5', cbs, 'test5'))
-    menu.add(('test6', cbs, 'test6'))
-    menu.add(('test7', cbs, 'test7'))
+        try:
+            shutil.rmtree(self.path)
+        except:
+            pass
 
-    print('==== dump menu ====')
-    menu.dump()
-    print('==== dump menu ====', end='\n\n')
+        os.mkdir(self.path)
 
-    d = Display(menu, 3)
-    d.show()
-
-    d.next()
-    d.triger()
-    d.next()
-    d.triger()
-    d.triger()
-    d.back()
-    d.back()
-    d.next()
-    d.triger()
-
-
+    def refresh(self, image):
+        self.logger.debug('DisplayFile: refresh, index = %d', self.file_index)
+        image.save(os.path.join(self.path, str(self.file_index) + '.jpg'), 'JPEG')
+        self.file_index += 1
