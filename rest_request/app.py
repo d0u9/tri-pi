@@ -11,7 +11,7 @@ class BackSchedule(object):
     pass
 
 class App(object):
-    def __init__(self, display):
+    def __init__(self, display, config):
         self.logger = logging.getLogger('rest_request')
 
         if not isinstance(display, Display):
@@ -20,6 +20,7 @@ class App(object):
         self.display = display
         self.font = 'font.ttf'
         self.image = Image.new('1', self.display.size)
+        self.config = config
 
     def event_next(self):
         self.logger.warning('App::event_next - default next event handler')

@@ -33,8 +33,8 @@ class StringDraw(object):
         self.draw.text((self.x, self.y), string, font=f, fill=1)
 
 class StringApp(App):
-    def __init__(self, display):
-        super(StringApp, self).__init__(display)
+    def __init__(self, display, config={}):
+        super(StringApp, self).__init__(display, config=config)
         self.font_name = self.font
         self.pos = (0, 0)
         self.str = ''

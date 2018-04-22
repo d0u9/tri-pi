@@ -73,7 +73,7 @@ class MenuDraw(object):
 
 
 class MenuApp(App):
-    def __init__(self, display, menu=[], font=None, font_size=8, offset=2, padding=2):
+    def __init__(self, display, config, menu=[], font=None, font_size=8, offset=2, padding=2):
         if font is not None and not isinstance(font, str):
             raise TypeError
 
@@ -83,7 +83,7 @@ class MenuApp(App):
         if not isinstance(font_size, int) or not isinstance(offset, int) or not isinstance(padding, int):
             raise TypeError
 
-        super(MenuApp, self).__init__(display)
+        super(MenuApp, self).__init__(display, config=config)
 
         self.padding = padding
         self.offset = offset
