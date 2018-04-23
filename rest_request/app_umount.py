@@ -11,9 +11,9 @@ from app_string import StringApp
 
 class UmountApp(MenuApp):
     def __init__(self, display, config):
-        self.menu_app = [('Movies', self.umount_movies),
-                         ('Videos', self.umount_videos),
-                         ('Games', self.umount_games),
+        self.menu_app = [('Movies',     self.umount_movies),
+                         ('Videos',     self.umount_videos),
+                         ('Games',      self.umount_games),
                          ('Backup All', self.umount_backup_all)]
         menu = [ i[0] for i in self.menu_app ]
         super(UmountApp, self).__init__(display, config=config, menu=menu)
