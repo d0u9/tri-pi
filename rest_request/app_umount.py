@@ -29,12 +29,12 @@ class UmountApp(MenuApp):
         retcode, retmsg = func()
 
         app = StringApp(self.display)
-        app.set(font_size=16, pos=(0,5))
+        app.set(font_size=16, pos=(5,1))
         if retcode:
             app.redraw('OK')
         else:
             app.redraw('Error Msg')
-        app.set(font_size=8, pos=(0, 36))
+        app.set(font_size=8, pos=(5, 36))
         app.redraw(retmsg)
 
         return app
