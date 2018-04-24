@@ -11,8 +11,8 @@ from app import App, BackSchedule
 prod_lock, cust_lock = Lock(), Lock()
 box = []
 
-screen_savet_time_first = 60
-screen_saver_time = 30
+screen_savet_time_first = 120
+screen_saver_time = 90
 
 class Core(object):
     display = None
