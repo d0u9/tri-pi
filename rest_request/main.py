@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     root = RootMenuApp(display, config=config)
 
-    core = Core(root)
+    core = Core(display, root)
     core.bind_events(key_binding)
 
     start_up = ImageApp(display)

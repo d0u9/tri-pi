@@ -4,6 +4,7 @@
 import logging
 
 from threading import Lock
+from threading import Timer
 
 from app import App, BackSchedule
 
@@ -11,10 +12,24 @@ prod_lock, cust_lock = Lock(), Lock()
 box = []
 
 class Core(object):
+    display = None
+    timer = None
+
+    @staticmethod
+    def timer_cb():
+        Core.display.turn_off()
+        Core.timer = None
+
     @staticmethod
     def handler_agent(event):
         logger = logging.getLogger('rest_request')
         logger.debug('Core::handler_agent, received event: %s', event)
+
+        if Core.timer is not None:
+            Core.timer.cancel()
+
+        Core.timer = Timer(5, Core.timer_cb)
+        Core.timer.start()
 
         if prod_lock.acquire(blocking=False):
             logger.debug('Core::handler_agent, event is queued')
@@ -23,7 +38,14 @@ class Core(object):
         else:
             logger.error('Core::handler_agent, event is not queued')
 
-    def __init__(self, root_app):
+    def __init__(self, display, root_app):
+        if Core.display is None:
+            Core.display = display
+
+        if Core.timer is None:
+            Core.timer = Timer(30, Core.timer_cb)
+            Core.timer.start()
+
         self.logger = logging.getLogger('rest_request')
 
         self.app_stack = [root_app,]

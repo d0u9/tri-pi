@@ -9,8 +9,15 @@ class Display(object):
     def __init__(self):
         self.size = (0, 0)
         self.logger = logging.getLogger('rest_request')
+        self.current_image = None
 
     def refresh(self, image):
+        pass
+
+    def trun_off(self):
+        pass
+
+    def trun_on(self):
         pass
 
 try:
@@ -36,8 +43,17 @@ try:
             self.oled.display()
 
         def refresh(self, image):
+            self.current_image = image
             self.logger.debug('DisplayOled: refresh')
             self.oled.image(image)
+            self.oled.display()
+
+        def turn_off(self):
+            self.oled.clear()
+            self.oled.display()
+
+        def turn_on(self):
+            self.oled.image(self.current_image)
             self.oled.display()
 except:
     pass
@@ -61,6 +77,7 @@ class DisplayFile(Display):
         os.mkdir(self.path)
 
     def refresh(self, image):
+        self.current_image = image
         self.logger.debug('DisplayFile: refresh, index = %d', self.file_index)
         image.save(os.path.join(self.path, str(self.file_index) + '.jpg'), 'JPEG')
         self.file_index += 1
