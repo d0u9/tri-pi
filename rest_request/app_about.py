@@ -34,6 +34,7 @@ class AboutApp(StringApp):
         self.set(font_size=8, pos=(5, 52))
         self.redraw('{} on {}'.format(os_name, arch))
 
+        self.refresh()
 
 
 

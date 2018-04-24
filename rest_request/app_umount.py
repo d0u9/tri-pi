@@ -36,6 +36,7 @@ class UmountApp(MenuApp):
             app.redraw('Error Msg')
         app.set(font_size=8, pos=(5, 36))
         app.redraw(retmsg)
+        app.refresh()
 
         return app
 

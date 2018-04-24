@@ -23,9 +23,7 @@ class StringDraw(object):
     def clear(self):
         self.draw.rectangle([0, 0, self.width-1, self.height-1], fill=0)
 
-    def redraw(self, string, font=None, font_size=None, pos=None, clear=False):
-        if clear:
-            self.clear()
+    def redraw(self, string, font=None, font_size=None, pos=None):
         self.font_name = self.font_name if font is None else font
         self.font_size = self.font_size if font_size is None else font_size
         self.x, self.y = (self.x, self.y) if pos is None else pos
@@ -56,9 +54,18 @@ class StringApp(App):
         self.logger.debug('StringApp::event_back')
         return BackSchedule()
 
+    def clear(self):
+        self.draw.clear()
+
     def redraw(self, string, clear=False):
+        if clear:
+            self.clear()
+
         self.str = string
-        self.draw.redraw(string, self.font_name, self.font_size, self.pos, clear)
+        self.draw.redraw(string, self.font_name, self.font_size, self.pos)
+
+    def refresh():
+        pass
 
     def set(self, font=None, font_size=None, pos=None):
         self.font_name = self.font_name if font is None else font
