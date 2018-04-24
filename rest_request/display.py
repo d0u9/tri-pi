@@ -4,6 +4,7 @@
 import shutil
 import os
 import logging
+import random
 
 class Display(object):
     def __init__(self):
@@ -18,6 +19,9 @@ class Display(object):
         pass
 
     def trun_on(self):
+        pass
+
+    def screen_saver(self):
         pass
 
 try:
@@ -41,20 +45,43 @@ try:
             self.oled.begin()
             self.oled.clear()
             self.oled.display()
+            self.state = True
 
         def refresh(self, image):
             self.current_image = image
             self.logger.debug('DisplayOled: refresh')
             self.oled.image(image)
-            self.oled.display()
+
+            if self.state is True:
+                self.oled.display()
 
         def turn_off(self):
             self.oled.clear()
             self.oled.display()
+            self.state = False
 
         def turn_on(self):
             self.oled.image(self.current_image)
             self.oled.display()
+            self.state = True
+
+        def screen_saver(self):
+            #  image = Image.new('1', (128, 64))
+            #  draw = ImageDraw.Draw(image)
+            #  draw.line((2,2, 124, 45), fill=1)
+            #  self.oled.image(image)
+            #  self.oled.display()
+
+            width = self.oled.width
+            pages = self.oled._pages
+            page = random.randint(0, width * pages -1)
+            bit = random.randint(0, 7)
+            k = 1 << bit
+            buf = [0]*(width * pages)
+            buf[page] = k
+            self.oled._buffer = buf
+            self.oled.display()
+
 except:
     pass
 

@@ -11,14 +11,24 @@ from app import App, BackSchedule
 prod_lock, cust_lock = Lock(), Lock()
 box = []
 
+screen_savet_time_first = 60
+screen_saver_time = 30
+
 class Core(object):
     display = None
     timer = None
+    display_state = True
+
 
     @staticmethod
     def timer_cb():
-        Core.display.turn_off()
-        Core.timer = None
+        if Core.display_state is True:
+            Core.display.turn_off()
+            Core.display_state = False
+
+        Core.display.screen_saver()
+        Core.timer = Timer(3, Core.timer_cb)
+        Core.timer.start()
 
     @staticmethod
     def handler_agent(event):
@@ -28,8 +38,12 @@ class Core(object):
         if Core.timer is not None:
             Core.timer.cancel()
 
-        Core.timer = Timer(5, Core.timer_cb)
+        Core.timer = Timer(screen_saver_time, Core.timer_cb)
         Core.timer.start()
+
+        if Core.display_state is False:
+            Core.display.turn_on()
+            Core.display_state = True
 
         if prod_lock.acquire(blocking=False):
             logger.debug('Core::handler_agent, event is queued')
@@ -43,7 +57,7 @@ class Core(object):
             Core.display = display
 
         if Core.timer is None:
-            Core.timer = Timer(30, Core.timer_cb)
+            Core.timer = Timer(screen_savet_time_first, Core.timer_cb)
             Core.timer.start()
 
         self.logger = logging.getLogger('rest_request')
