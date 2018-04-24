@@ -16,13 +16,13 @@ class AboutApp(LineStringApp):
         self.draw_image()
 
     def draw_image(self):
-        self.set(font_size=16, box=(5, 1, 128, 20), line_height=16)
+        self.set(font_size=16, box=(5, 1, 128, 20), line_height=18)
 
         self.redraw('About', clear=True)
-        self.set('fix.ttf', font_size=8, box=(5, 21, 128-5, 30), line_height=8)
+        self.set('fix.ttf', font_size=8, box=(5, 23, 128-5, 32), line_height=8)
         self.redraw('Version: dev')
 
-        self.set('fix.ttf', font_size=8, box=(5, 31, 128-5, 40), line_height=8)
+        self.set('fix.ttf', font_size=8, box=(5, 33, 128-5, 42), line_height=8)
         self.redraw('Author: d0u9')
 
         kernel = check_output(['/bin/uname', '-r']).decode('ascii').strip()

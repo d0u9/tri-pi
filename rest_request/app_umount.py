@@ -7,7 +7,7 @@ import json
 
 from app import BackSchedule
 from app_menu import MenuApp
-from app_string import StringApp
+from app_line_string import LineStringApp
 
 class UmountApp(MenuApp):
     def __init__(self, display, config):
@@ -27,14 +27,16 @@ class UmountApp(MenuApp):
         self.logger.debug('UmountApp::event_trigger, cb_func = %s', func)
 
         retcode, retmsg = func()
+        #  retcode, retmsg = (True, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz')
 
-        app = StringApp(self.display)
-        app.set(font_size=16, pos=(5,1))
+        app = LineStringApp(self.display)
+        app.set(font_size=16, box=(5, 1, 128, 20), line_height=18)
         if retcode:
             app.redraw('OK')
         else:
             app.redraw('Error Msg')
-        app.set(font_size=8, pos=(5, 36))
+
+        app.set(font_size=8, box=(5, 21, 128-5, 300), line_height=10)
         app.redraw(retmsg)
         app.refresh()
 

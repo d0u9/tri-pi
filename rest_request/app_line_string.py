@@ -20,13 +20,14 @@ class LineStringApp(StringApp):
         self.draw_ = ImageDraw.Draw(self.image)
         self.max_height = 0
         self.current_screen = 0
-        self.scroll_height = 10
+        self.scroll_height = 16
 
-    def set(self, font=None, font_size=None, box=None, line_height=None):
+    def set(self, font=None, font_size=None, box=None, line_height=None, auto_height=True):
         self.font_name = self.font_name if font is None else font
         self.font_size = self.font_size if font_size is None else font_size
         self.box = self.box if box is None else box
         self.line_height = self.line_height if line_height is None else line_height
+        self.auto_height = auto_height
 
     def redraw(self, string, clear=False, blank_between_paragraph=True):
         self.str = string
@@ -35,7 +36,6 @@ class LineStringApp(StringApp):
 
         width = self.box[2] - self.box[0]
         height = self.box[3] - self.box[1]
-        self.max_height = max(self.max_height, self.box[3])
 
         image = Image.new('1', (width, height))
         draw = StringDraw(image, self.font)
@@ -54,7 +54,14 @@ class LineStringApp(StringApp):
                 draw.redraw('\n', self.font_name, self.font_size, pos)
                 i += 1
 
-        self.image_list.append((self.box, image))
+        lines = i - 1 if blank_between_paragraph else i
+
+        if self.auto_height:
+            box = (self.box[0], self.box[1], self.box[2], lines * self.line_height + self.box[1])
+        else:
+            box = self.box
+        self.max_height = max(self.max_height, box[3])
+        self.image_list.append((box, image))
 
     def refresh(self):
         max_width = 128
@@ -62,8 +69,12 @@ class LineStringApp(StringApp):
 
         self.full_image = Image.new('1', (max_width, max_height))
 
+        i = 0
         for fragment in self.image_list:
-            self.full_image.paste(fragment[1], fragment[0])
+            box = fragment[0]
+            im = fragment[1].crop((0, 0, box[2] - box[0], box[3] - box[1]))
+            self.full_image.paste(im, fragment[0])
+            i += 1
 
         self.crop_creen()
 
