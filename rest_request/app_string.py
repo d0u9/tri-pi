@@ -55,6 +55,7 @@ class StringApp(App):
         return BackSchedule()
 
     def clear(self):
+        self.logger.debug('StringApp::clear')
         self.draw.clear()
 
     def redraw(self, string, clear=False):

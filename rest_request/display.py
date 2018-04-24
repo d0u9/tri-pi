@@ -24,6 +24,12 @@ class Display(object):
     def screen_saver(self):
         pass
 
+    def clear(self):
+        pass
+
+    def display(self):
+        pass
+
 try:
     import RPi.GPIO as GPIO
     import Adafruit_GPIO.SPI as SPI
@@ -66,12 +72,6 @@ try:
             self.state = True
 
         def screen_saver(self):
-            #  image = Image.new('1', (128, 64))
-            #  draw = ImageDraw.Draw(image)
-            #  draw.line((2,2, 124, 45), fill=1)
-            #  self.oled.image(image)
-            #  self.oled.display()
-
             width = self.oled.width
             pages = self.oled._pages
             page = random.randint(0, width * pages -1)
@@ -82,9 +82,14 @@ try:
             self.oled._buffer = buf
             self.oled.display()
 
+        def clear(self):
+            self.oled.clear()
+
+        def display(self):
+            self.oled.display()
+
 except:
     pass
-
 
 class DisplayFile(Display):
     def __init__(self, path):

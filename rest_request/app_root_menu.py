@@ -7,6 +7,8 @@ from app_menu import MenuApp
 from app_image import ImageApp
 from app_umount import UmountApp
 from app_about import AboutApp
+from app_reboot import RebootApp
+from app_poweroff import PoweroffApp
 
 class RootMenuApp(MenuApp):
     def __init__(self, display, config):
@@ -14,7 +16,9 @@ class RootMenuApp(MenuApp):
         self.menu_app = [
                          ('Umount',         UmountApp),
                          ('Show my Logo',   ImageApp),
-                         ('About',          AboutApp)
+                         ('Reboot',         RebootApp),
+                         ('Poweroff',       PoweroffApp),
+                         ('About',          AboutApp),
                         ]
         menu = [ i[0] for i in self.menu_app ]
         super(RootMenuApp, self).__init__(display, config=config, menu=menu, font=self.font)
