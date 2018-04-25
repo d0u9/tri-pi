@@ -10,8 +10,8 @@ from app import BackSchedule
 from app_line_string import LineStringApp
 
 class ConfirmApp(LineStringApp):
-    def __init__(self, display, config={}):
-        super(ConfirmApp, self).__init__(display, config=config)
+    def __init__(self, display, devs, config={}):
+        super(ConfirmApp, self).__init__(display, devs, config=config)
 
         self.ok = None
         self.cancle = None

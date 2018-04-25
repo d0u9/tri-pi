@@ -16,8 +16,8 @@ class RebootApp(ConfirmApp):
         logger.warning('PoweroffApp::OK, prepare to reboot')
         call(['/usr/bin/sudo', '/sbin/reboot'])
 
-    def __init__(self, display, config={}):
-        super(RebootApp, self).__init__(display, config=config)
+    def __init__(self, display, devs, config={}):
+        super(RebootApp, self).__init__(display, devs, config=config)
         self.logger.debug('RebootApp::__init__')
 
         self.set_caption('Sure to reboot?')

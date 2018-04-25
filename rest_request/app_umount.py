@@ -8,15 +8,16 @@ import json
 from app import BackSchedule
 from app_menu import MenuApp
 from app_line_string import LineStringApp
+from dev_led import LedDev
 
 class UmountApp(MenuApp):
-    def __init__(self, display, config):
+    def __init__(self, display, devs, config):
         self.menu_app = [('Movies',     self.umount_movies),
                          ('Videos',     self.umount_videos),
                          ('Games',      self.umount_games),
                          ('Backup All', self.umount_backup_all)]
         menu = [ i[0] for i in self.menu_app ]
-        super(UmountApp, self).__init__(display, config=config, menu=menu)
+        super(UmountApp, self).__init__(display, devs, config=config, menu=menu)
 
         self.logger.debug('UmountApp::__init__, menu = %s', self.menu_app)
         self.config = config.get('app_umount', None)
@@ -26,10 +27,18 @@ class UmountApp(MenuApp):
         func = self.menu_app[self.current][1]
         self.logger.debug('UmountApp::event_trigger, cb_func = %s', func)
 
+        self.devs['leds'].off_all()
+        self.devs['leds'].on(LedDev.BLUE)
         retcode, retmsg = func()
         #  retcode, retmsg = (True, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz')
 
-        app = LineStringApp(self.display)
+        self.devs['leds'].off_all()
+        if retcode:
+            self.devs['leds'].on(LedDev.GREEN)
+        else:
+            self.devs['leds'].on(LedDev.RED)
+
+        app = LineStringApp(self.display, self.devs)
         app.set(font_size=16, box=(5, 1, 128, 20), line_height=18)
         if retcode:
             app.redraw('OK')

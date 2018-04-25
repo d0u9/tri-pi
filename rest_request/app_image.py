@@ -9,8 +9,8 @@ from PIL import ImageMath
 from app import App, BackSchedule
 
 class ImageApp(App):
-    def __init__(self, display, config={}):
-        super(ImageApp, self).__init__(display, config=config)
+    def __init__(self, display, devs, config={}):
+        super(ImageApp, self).__init__(display, devs, config=config)
         self.pic = None
         self.image = None
 

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import RPi.GPIO as GPIO
 
 from threading import Lock
 from threading import Timer
@@ -16,6 +17,8 @@ screen_saver_time = 90
 
 class Core(object):
     display = None
+    config = None
+    devs = None
     timer = None
     display_state = True
 
@@ -24,6 +27,7 @@ class Core(object):
     def timer_cb():
         if Core.display_state is True:
             Core.display.turn_off()
+            Core.devs['leds'].off_all()
             Core.display_state = False
 
         Core.display.screen_saver()
@@ -52,24 +56,39 @@ class Core(object):
         else:
             logger.error('Core::handler_agent, event is not queued')
 
-    def __init__(self, display, root_app):
+    def __init__(self, display, devs, config):
         if Core.display is None:
             Core.display = display
+
+        if Core.devs is None:
+            Core.devs = devs
+
+        if Core.config is None:
+            Core.config = config
 
         if Core.timer is None:
             Core.timer = Timer(screen_savet_time_first, Core.timer_cb)
             Core.timer.start()
 
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        for dev in devs.values():
+            dev.init()
+
         self.logger = logging.getLogger('rest_request')
 
-        self.app_stack = [root_app,]
-        self.logger.info('Core::__ini__, root app is %s', root_app)
+        self.app_stack = []
+        self.logger.info('Core::__ini__')
 
         self.prod_lock = prod_lock
         self.cust_lock = cust_lock
         self.cust_lock.acquire()
         self.box = box
         self.func_binding = {}
+
+    def set_root_app(self, root_app):
+        root = root_app(self.display, self.devs, self.config)
+        self.app_stack.append(root)
 
     def bind_event(self, event, func):
         self.logger.info('Core::bind_event, binding %s <-> %s', event, func)
@@ -90,6 +109,11 @@ class Core(object):
         app.show()
 
     def run(self):
+        if len(self.app_stack) == 0:
+            raise Exception('No root app specified!')
+
+
+
         self.app_stack[0].show()
         while(True):
             self.logger.debug('Core::run, waiting for new event')

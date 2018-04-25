@@ -9,8 +9,8 @@ from PIL import ImageMath
 from app_string import StringApp, StringDraw
 
 class LineStringApp(StringApp):
-    def __init__(self, display, config={}):
-        super(LineStringApp, self).__init__(display, config=config)
+    def __init__(self, display, devs, config={}):
+        super(LineStringApp, self).__init__(display, devs, config=config)
 
         self.box = (0, 0, self.image.width-1, self.image.height-1)
         self.line_height = 10

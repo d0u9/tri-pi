@@ -16,8 +16,8 @@ class PoweroffApp(ConfirmApp):
         logger.warning('PoweroffApp::OK, prepare to poweroff')
         call(['/usr/bin/sudo', '/sbin/poweroff'])
 
-    def __init__(self, display, config={}):
-        super(PoweroffApp, self).__init__(display, config=config)
+    def __init__(self, display, devs, config={}):
+        super(PoweroffApp, self).__init__(display, devs, config=config)
         self.logger.debug('PoweroffApp::__init__')
 
         self.set_caption('Sure to poweroff?')

@@ -13,8 +13,9 @@ from app import App
 from display import DisplayFile
 from app_image import ImageApp
 from app_root_menu import RootMenuApp
-
 from app_image import ImageApp
+
+from dev_led import LedDev
 
 try:
     from btn import PhyButton
@@ -64,12 +65,13 @@ if __name__ == '__main__':
     except:
         display = DisplayFile('/tmp/to_file')
 
-    root = RootMenuApp(display, config=config)
+    devs = {'leds': LedDev}
 
-    core = Core(display, root)
+    core = Core(display, devs, config)
+    core.set_root_app(RootMenuApp)
     core.bind_events(key_binding)
 
-    start_up = ImageApp(display)
+    start_up = ImageApp(display, devs)
     start_up.set('Logo2.bmp')
     start_up.show()
     sleep(1)
