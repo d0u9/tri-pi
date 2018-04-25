@@ -50,7 +50,10 @@ class UmountApp(MenuApp):
         self.logger.debug('UmountApp::rest_request, umounting movies disk')
         url = os.path.join(self.server, label)
         self.logger.debug('UmountApp::rest_request, request url = %s', url)
-        r = requests.get(url)
+        try:
+            r = requests.get(url)
+        except requests.ConnectionError as e:
+            return (False, str(e))
 
         if r.status_code == 200:
             self.logger.info('UmountApp::rest_request, umount movie successfully(200)')
