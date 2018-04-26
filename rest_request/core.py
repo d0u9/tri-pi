@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    pass
 
 from threading import Lock
 from threading import Timer
@@ -70,8 +73,12 @@ class Core(object):
             Core.timer = Timer(screen_savet_time_first, Core.timer_cb)
             Core.timer.start()
 
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
+        try:
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setwarnings(False)
+        except:
+            pass
+
         for dev in devs.values():
             dev.init()
 

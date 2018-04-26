@@ -1,55 +1,79 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import RPi.GPIO as GPIO
-
 from device import Device
 
-class LedDev(Device):
-    RED = 16
-    GREEN = 20
-    BLUE = 21
+try:
+    import RPi.GPIO as GPIO
 
-    level_dict = { True: GPIO.HIGH, False: GPIO.LOW }
-    state = { RED: False, GREEN: False, BLUE: False }
+    class LedDev(Device):
+        RED = 16
+        GREEN = 20
+        BLUE = 21
 
-    @staticmethod
-    def init():
-        Device.init()
-        GPIO.setup([LedDev.RED, LedDev.GREEN, LedDev.BLUE], GPIO.OUT, initial=GPIO.LOW)
+        level_dict = { True: GPIO.HIGH, False: GPIO.LOW }
+        state = { RED: False, GREEN: False, BLUE: False }
 
-    def on(led):
-        if led not in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
-            return
+        @staticmethod
+        def init():
+            Device.init()
+            GPIO.setup([LedDev.RED, LedDev.GREEN, LedDev.BLUE], GPIO.OUT, initial=GPIO.LOW)
 
-        state = True
-        LedDev.state[led] = state
-        GPIO.output(led, LedDev.level_dict[state])
+        def on(led):
+            if led not in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
+                return
 
-    @staticmethod
-    def off(led):
-        if led not in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
-            return
+            state = True
+            LedDev.state[led] = state
+            GPIO.output(led, LedDev.level_dict[state])
 
-        state = False
-        LedDev.state[led] = state
-        GPIO.output(led, LedDev.level_dict[state])
+        @staticmethod
+        def off(led):
+            if led not in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
+                return
 
-    @staticmethod
-    def toggle(led):
-        if led not in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
-            return
+            state = False
+            LedDev.state[led] = state
+            GPIO.output(led, LedDev.level_dict[state])
 
-        state = not LedDev.state[led]
-        LedDev.state[led] = state
-        GPIO.output(led, LedDev.level_dict[state])
+        @staticmethod
+        def toggle(led):
+            if led not in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
+                return
 
-    def off_all():
-        for led in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
-            LedDev.off(led)
+            state = not LedDev.state[led]
+            LedDev.state[led] = state
+            GPIO.output(led, LedDev.level_dict[state])
 
-    def on_all():
-        for led in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
-            LedDev.on(led)
+        def off_all():
+            for led in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
+                LedDev.off(led)
 
+        def on_all():
+            for led in [LedDev.RED, LedDev.GREEN, LedDev.BLUE]:
+                LedDev.on(led)
+
+
+except:
+    class LedDev(Device):
+        @staticmethod
+        def init():
+            pass
+
+        def on(led):
+            pass
+
+        @staticmethod
+        def off(led):
+            pass
+
+        @staticmethod
+        def toggle(led):
+            pass
+
+        def off_all():
+            pass
+
+        def on_all():
+            pass
 

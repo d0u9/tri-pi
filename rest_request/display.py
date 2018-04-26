@@ -15,10 +15,10 @@ class Display(object):
     def refresh(self, image):
         pass
 
-    def trun_off(self):
+    def turn_off(self):
         pass
 
-    def trun_on(self):
+    def turn_on(self):
         pass
 
     def screen_saver(self):
