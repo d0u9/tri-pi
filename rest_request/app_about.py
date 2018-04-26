@@ -13,8 +13,8 @@ from app_line_string import LineStringApp
 class AboutApp(LineStringApp):
     def __init__(self, display, devs, config):
         super(AboutApp, self).__init__(display, devs, config)
-        self.draw_image()
         self.font = 'font.ttf'
+        self.draw_image()
 
     def draw_image(self):
         self.set(font_size=16, box=(5, 1, 128, 20), line_height=18)
