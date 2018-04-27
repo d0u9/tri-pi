@@ -207,3 +207,10 @@ class StatsExcerptApp(LineStringApp):
             self.timer.cancel()
 
         return BackSchedule()
+
+    def event_trigger(self):
+        if self.timer is not None:
+            self.timer.cancel()
+
+        return BackSchedule()
+
