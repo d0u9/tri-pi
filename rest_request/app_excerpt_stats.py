@@ -73,7 +73,7 @@ class StatsExcerptApp(LineStringApp):
         box = (left, top, right, top + 100)
         act_box = self.add_progress_bar(box=box,
                                         total=100, current=data['cpu']['percent'],
-                                        fmt='Load: %.1f', percent=True)
+                                        fmt='Load: %.1f %%', percent=True)
         top += (act_box[3] - act_box[1])
 
         # Mem
