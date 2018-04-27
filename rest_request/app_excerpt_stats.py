@@ -133,7 +133,7 @@ class StatsExcerptApp(LineStringApp):
         for key, val in network.items():
             dev = network[key]
             box = (left, top, right, top + 100)
-            self.set(font='fix.ttf', font_size=8, box=box, line_height=line_height)
+            self.set(font='font.ttf', font_size=8, box=box, line_height=line_height)
             act_box = self.redraw('== {} =='.format(key))
             top += (act_box[3] - act_box[1]) + section_padding
 
@@ -165,12 +165,12 @@ class StatsExcerptApp(LineStringApp):
             recv_spped = self.data_fetcher.humanfy(recv_bytes_diff / self.refresh_interval / 8)
 
             box = (left, top, right, top + 100)
-            self.set(font='fix.ttf', font_size=8, box=box, line_height=line_height)
+            self.set(font='font.ttf', font_size=8, box=box, line_height=line_height)
             act_box = self.redraw('up: {}/s'.format(send_speed))
             top += (act_box[3] - act_box[1]) + section_padding
 
             box = (left, top, right, top + 100)
-            self.set(font='fix.ttf', font_size=8, box=box, line_height=line_height)
+            self.set(font='font.ttf', font_size=8, box=box, line_height=line_height)
             act_box = self.redraw('down: {}/s'.format(send_speed))
             top += (act_box[3] - act_box[1]) + section_padding
 
