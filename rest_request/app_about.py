@@ -40,14 +40,14 @@ class AboutApp(LineStringApp):
         self.set(self.font, font_size=8, box=(5, 63, 128-5, 72), line_height=10)
         self.redraw('Arch: {}'.format(arch))
 
-        p1 = Popen(split("lscpu"), stdout=PIPE)
-        p2 = Popen(split("awk -F ':' '$1==\"Model name\"{print $2}'"), stdin=p1.stdout, stdout=PIPE)
+        p1 = Popen(split("/usr/bin/lscpu"), stdout=PIPE)
+        p2 = Popen(split("/usr/bin/awk -F ':' '$1==\"Model name\"{print $2}'"), stdin=p1.stdout, stdout=PIPE)
         cpu = p2.stdout.read().decode('ascii').strip()
         self.set(self.font, font_size=8, box=(5, 73, 128-5, 82), line_height=10)
         self.redraw('Model: {}'.format(cpu))
 
-        p1 = Popen(split("free -h"), stdout=PIPE)
-        p2 = Popen(split("awk '$1==\"Mem:\"{print $2}'"),  stdin=p1.stdout, stdout=PIPE)
+        p1 = Popen(split("/usr/bin/free -h"), stdout=PIPE)
+        p2 = Popen(split("/usr/bin/awk '$1==\"Mem:\"{print $2}'"),  stdin=p1.stdout, stdout=PIPE)
         mem = p2.stdout.read().decode('ascii').strip()
         self.set(self.font, font_size=8, box=(5, 83, 128-5, 92), line_height=10)
         self.redraw('Memory: {}'.format(mem))
