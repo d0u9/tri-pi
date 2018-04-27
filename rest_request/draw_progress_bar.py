@@ -41,7 +41,6 @@ class ProgressBarDraw(object):
 
         self.caption_percent = caption_percent
 
-
     def draw(self, auto_height=True, humanfy=lambda x: x):
         self.d.rectangle(self.box, outline=1)
 
@@ -56,12 +55,10 @@ class ProgressBarDraw(object):
         caption_pos = (self.box[2] - size[0], self.box[3] + self.caption_padding)
         self.d.text(caption_pos, caption, font=fnt, fill=1)
 
-        if self.current is 0:
-            return
-
-        width = (self.box[2] - self.box[0]) * (self.current / self.total) + self.box[0]
-        fill_box = (self.box[0], self.box[1], width, self.box[3])
-        self.d.rectangle(fill_box, fill=1)
+        if self.current != 0:
+            width = (self.box[2] - self.box[0]) * (self.current / self.total) + self.box[0]
+            fill_box = (self.box[0], self.box[1], width, self.box[3])
+            self.d.rectangle(fill_box, fill=1)
 
         return (self.box[0], self.box[1], self.box[2], self.box[3] + self.caption_padding + size[1])
 
