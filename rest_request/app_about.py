@@ -49,7 +49,7 @@ class AboutApp(LineStringApp):
         p1 = Popen(split("/usr/bin/free -h"), stdout=PIPE)
         p2 = Popen(split("/usr/bin/awk '$1==\"Mem:\"{print $2}'"),  stdin=p1.stdout, stdout=PIPE)
         mem = p2.stdout.read().decode('ascii').strip()
-        self.set(self.font, font_size=8, box=(5, 83, 128-5, 92), line_height=10)
+        self.set(self.font, font_size=8, box=(5, 83, 128-5, 92), line_height=12)
         self.redraw('Memory: {}'.format(mem))
 
         self.refresh()
