@@ -158,11 +158,11 @@ class StatsExcerptApp(LineStringApp):
                 act_box = self.redraw('BROAD: {}'.format(ip[2]))
                 top += (act_box[3] - act_box[1]) + section_padding
 
-            send_bytes_diff = dev['stat']['bytes_sent'] - self.exerpt['network'][key]['stat']['bytes_sent']
-            recv_bytes_diff = dev['stat']['bytes_recv'] - self.exerpt['network'][key]['stat']['bytes_recv']
+            send_bytes_diff = int(dev['stat']['bytes_sent']) - int(self.exerpt['network'][key]['stat']['bytes_sent'])
+            recv_bytes_diff = int(dev['stat']['bytes_recv']) - int(self.exerpt['network'][key]['stat']['bytes_recv'])
 
-            send_speed = self.data_fetcher.humanfy(send_bytes_diff / self.refresh_interval / 8)
-            recv_spped = self.data_fetcher.humanfy(recv_bytes_diff / self.refresh_interval / 8)
+            send_speed = self.data_fetcher.humanfy(send_bytes_diff / self.refresh_interval)
+            recv_speed = self.data_fetcher.humanfy(recv_bytes_diff / self.refresh_interval)
 
             box = (left, top, right, top + 100)
             self.set(font='font.ttf', font_size=8, box=box, line_height=line_height)
@@ -171,9 +171,10 @@ class StatsExcerptApp(LineStringApp):
 
             box = (left, top, right, top + 100)
             self.set(font='font.ttf', font_size=8, box=box, line_height=line_height)
-            act_box = self.redraw('down: {}/s'.format(send_speed))
+            act_box = self.redraw('down: {}/s'.format(recv_speed))
             top += (act_box[3] - act_box[1]) + section_padding
 
+        self.exerpt = data
         self.refresh()
         self.show()
 
@@ -194,9 +195,9 @@ class StatsExcerptApp(LineStringApp):
         self.timer.start()
 
     def timer_cb(self):
-        self.draw_image()
         self.timer = Timer(self.refresh_interval, self.timer_cb)
         self.timer.start()
+        self.draw_image()
 
     def set_data_fetcher(self, data_fetcher):
         self.data_fetcher = data_fetcher
