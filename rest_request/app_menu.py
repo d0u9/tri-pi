@@ -110,7 +110,9 @@ class MenuApp(App):
         if self.current >= self.top_pos + self.max_line:
             self.top_pos += 1
 
-        self.draw.update(self.menu)
+        remain = len(self.menu) - self.top_pos
+        m = self.menu[self.top_pos: self.top_pos + min(self.max_line, remain)]
+        self.draw.update(m)
         self.draw.select(self.current - self.top_pos)
 
         self.show()
@@ -126,7 +128,9 @@ class MenuApp(App):
         if self.current < self.top_pos:
             self.top_pos -= 1
 
-        self.draw.update(self.menu)
+        remain = len(self.menu) - self.top_pos
+        m = self.menu[self.top_pos: self.top_pos + min(self.max_line, remain)]
+        self.draw.update(m)
         self.draw.select(self.current - self.top_pos)
 
         self.show()

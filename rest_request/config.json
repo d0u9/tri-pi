@@ -2,5 +2,8 @@
     "log_level": "debug",
     "app_umount": {
         "server": "http://tri-server:8080/umount"
+    },
+    "app_excerpt_stats": {
+        "server": "http://tri-server:8080/stats"
     }
 }
