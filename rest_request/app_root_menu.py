@@ -12,12 +12,14 @@ from app_poweroff import PoweroffApp
 from app_excerpt_stats import StatsExcerptApp
 
 from pi_stats_data import PiStatsData
+from server_stats_data import ServerStatsData
 
 class RootMenuApp(MenuApp):
     def __init__(self, display, devs, config):
         self.font = 'font.ttf'
         self.menu_app = [
                          ('Umount',         UmountApp),
+                         ('Server Stats',   StatsExcerptApp),
                          ('Pi Stats',       StatsExcerptApp),
                          ('Show my Logo',   ImageApp),
                          ('Reboot',         RebootApp),
@@ -38,6 +40,9 @@ class RootMenuApp(MenuApp):
             app.set('Logo2.bmp')
         elif self.menu_app[self.current][0] == 'Pi Stats':
             app.set_data_fetcher(PiStatsData)
+            app.run()
+        elif self.menu_app[self.current][0] == 'Server Stats':
+            app.set_data_fetcher(ServerStatsData)
             app.run()
 
 

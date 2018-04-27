@@ -3,6 +3,7 @@
 
 import logging
 from threading import Timer
+from requests import ConnectionError
 
 from PIL import Image
 from PIL import ImageFont
@@ -40,7 +41,11 @@ class StatsExcerptApp(LineStringApp):
             self.error_handler('No data fetcher specified')
             return
 
-        data = self.data_fetcher.GetExcerpt()
+        try:
+            data = self.data_fetcher.GetExcerpt(self.config['app_excerpt_stats'])
+        except ConnectionError as e:
+            self.error_handler(str(e))
+            return
 
         if self.exerpt is None:
             self.exerpt = data

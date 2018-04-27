@@ -26,10 +26,10 @@ class PiStatsData(object):
 
     @staticmethod
     def GetAll():
-        return { 'cpu': PiStatsData.GetCpu() }
+        pass
 
     @staticmethod
-    def GetExcerpt():
+    def GetExcerpt(config):
         cpu = { 'percent': psutil.cpu_percent(),
                 'count': psutil.cpu_count(),
                 'freq': psutil.cpu_freq()[0],
