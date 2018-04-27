@@ -21,7 +21,7 @@ class AboutApp(LineStringApp):
 
         self.redraw('About', clear=True)
         self.set(self.font, font_size=8, box=(5, 23, 128-5, 32), line_height=10)
-        self.redraw('Version: dev')
+        self.redraw('Version: master')
 
         self.set(self.font, font_size=8, box=(5, 33, 128-5, 42), line_height=10)
         self.redraw('Author: d0u9')
