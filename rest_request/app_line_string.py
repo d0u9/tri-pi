@@ -6,6 +6,8 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from PIL import ImageMath
 
+from display import DisplayFile
+
 from app_string import StringApp, StringDraw
 
 class LineStringApp(StringApp):
@@ -20,7 +22,7 @@ class LineStringApp(StringApp):
         self.draw_ = ImageDraw.Draw(self.image)
         self.max_height = 0
         self.current_screen = 0
-        self.scroll_height = 16
+        self.scroll_height = 30
 
     def set(self, font=None, font_size=None, box=None, line_height=None, auto_height=True):
         self.font_name = self.font_name if font is None else font
@@ -60,6 +62,11 @@ class LineStringApp(StringApp):
             box = (self.box[0], self.box[1], self.box[2], lines * self.line_height + self.box[1])
         else:
             box = self.box
+        self.append_image(box, image)
+
+        return box
+
+    def append_image(self, box, image):
         self.max_height = max(self.max_height, box[3])
         self.image_list.append((box, image))
 
@@ -77,6 +84,9 @@ class LineStringApp(StringApp):
             i += 1
 
         self.crop_creen()
+
+        if isinstance(self.display, DisplayFile):
+            self.image = self.full_image
 
     def crop_creen(self):
         crop_box = (0, self.current_screen, self.image.width, self.current_screen + self.image.height)

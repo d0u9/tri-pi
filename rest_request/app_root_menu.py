@@ -9,14 +9,16 @@ from app_umount import UmountApp
 from app_about import AboutApp
 from app_reboot import RebootApp
 from app_poweroff import PoweroffApp
-from app_pi_stats import PiStatsApp
+from app_excerpt_stats import StatsExcerptApp
+
+from pi_stats_data import PiStatsData
 
 class RootMenuApp(MenuApp):
     def __init__(self, display, devs, config):
         self.font = 'font.ttf'
         self.menu_app = [
-                         ('Pi Stats',       PiStatsApp),
                          ('Umount',         UmountApp),
+                         ('Pi Stats',       StatsExcerptApp),
                          ('Show my Logo',   ImageApp),
                          ('Reboot',         RebootApp),
                          ('Poweroff',       PoweroffApp),
@@ -34,6 +36,10 @@ class RootMenuApp(MenuApp):
 
         if self.menu_app[self.current][0] == 'Show my Logo':
             app.set('Logo2.bmp')
+        elif self.menu_app[self.current][0] == 'Pi Stats':
+            app.set_data_fetcher(PiStatsData)
+            app.run()
+
 
         return app
 
